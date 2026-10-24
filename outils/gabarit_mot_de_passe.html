@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Studio Laguna 3 Les Maldives</title>
+<style>
+:root { --bg: #f6f8f8; --surface: #ffffff; --ink: #142326; --muted: #55686b; --line: #d6e0e0; --lagoon: #0f8a8f; --warn: #a35a12; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0e1719; --surface: #152226; --ink: #e5eeee; --muted: #9db0b2; --line: #26383c; --lagoon: #4cc3c7; --warn: #e3a35c; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0e1719; --surface: #152226; --ink: #e5eeee; --muted: #9db0b2; --line: #26383c; --lagoon: #4cc3c7; --warn: #e3a35c; color-scheme: dark }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+#verrou { min-height: 100vh; display: grid; place-items: center; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); box-sizing: border-box; }
+#verrou form { width: 100%; max-width: 360px; display: grid; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; box-sizing: border-box; }
+#verrou h1 { margin: 0; font-size: 1.3rem; }
+#verrou p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+#verrou input { font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+#verrou button { font: inherit; font-weight: 600; padding: 10px 12px; border: 0; border-radius: 6px; background: var(--lagoon); color: #fff; cursor: pointer; }
+#verrou button:disabled { opacity: 0.6; cursor: wait; }
+#verrou input:focus-visible, #verrou button:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 2px; }
+#erreur { color: var(--warn); min-height: 1.2em; }
+</style>
+</head>
+<body>
+<div id="verrou">
+  <form id="form-verrou">
+    <h1>Studio Laguna 3 Les Maldives</h1>
+    <p>Cette page est privée. Entrez le mot de passe pour la voir.</p>
+    <label for="mdp" hidden>Mot de passe</label>
+    <input id="mdp" type="password" autocomplete="current-password" placeholder="Mot de passe" required>
+    <button id="ouvrir" type="submit">Ouvrir</button>
+    <p id="erreur" role="alert"></p>
+  </form>
+</div>
+<div id="app"></div>
+<script>
+const SEL = "__SEL__", ITERATIONS = __ITERATIONS__, BASE_PHOTOS = "__BASE_PHOTOS__";
+const COMPRESSE = __COMPRESSE__, CONTENU = "__CONTENU__";
+const octets = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function deriver(mdp) {
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(mdp), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt: octets(SEL), iterations: ITERATIONS, hash: "SHA-256" },
+    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+}
+const dechiffrer = (cle, donnees) =>
+  crypto.subtle.decrypt({ name: "AES-GCM", iv: donnees.slice(0, 12) }, cle, donnees.slice(12));
+
+async function afficher(cle, html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  doc.querySelectorAll("head style, head link").forEach(el => document.head.appendChild(el));
+  document.getElementById("verrou").remove();
+  const app = document.getElementById("app");
+  const scripts = [...doc.body.querySelectorAll("script")];
+  scripts.forEach(s => s.remove());
+  app.replaceWith(...doc.body.childNodes);
+  for (const s of scripts) { const n = document.createElement("script"); n.textContent = s.textContent; document.body.appendChild(n); }
+  for (const img of document.querySelectorAll("img[data-photo]")) {
+    try {
+      const r = await fetch(BASE_PHOTOS + img.dataset.photo + ".bin");
+      const clair = await dechiffrer(cle, new Uint8Array(await r.arrayBuffer()));
+      img.src = URL.createObjectURL(new Blob([clair], { type: "image/jpeg" }));
+    } catch (e) { img.alt = "Photo indisponible"; }
+  }
+}
+
+async function ouvrir(mdp, silencieux) {
+  const bouton = document.getElementById("ouvrir"), erreur = document.getElementById("erreur");
+  bouton.disabled = true; erreur.textContent = "";
+  try {
+    const cle = await deriver(mdp);
+    let clair = await dechiffrer(cle, octets(CONTENU));
+    if (COMPRESSE) clair = await new Response(new Blob([clair]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+    const html = new TextDecoder().decode(clair);
+    try { sessionStorage.setItem("laguna3-mdp", mdp); } catch (e) {}
+    await afficher(cle, html);
+  } catch (e) {
+    try { sessionStorage.removeItem("laguna3-mdp"); } catch (e2) {}
+    if (!silencieux) erreur.textContent = "Mot de passe incorrect. Vérifiez et réessayez.";
+    bouton.disabled = false;
+  }
+}
+
+document.getElementById("form-verrou").addEventListener("submit", e => {
+  e.preventDefault();
+  ouvrir(document.getElementById("mdp").value, false);
+});
+try { const m = sessionStorage.getItem("laguna3-mdp"); if (m) ouvrir(m, true); } catch (e) {}
+</script>
+</body>
+</html>

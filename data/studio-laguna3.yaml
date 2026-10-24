@@ -1,0 +1,36 @@
+# Cas réel anonymisé — publiable dans le dépôt GitHub
+# (sans numéro de lot, de titre foncier, d'identité ni de compte bancaire)
+id: cas-reel-jomtien-studio-2026
+statut: achat réalisé en 2026 (référence)
+residence: Laguna Beach Resort 3 – The Maldives
+ville: Jomtien
+district: Bang Lamung, Chonburi
+lot:
+  type: studio meublé, vue piscine lagon, balcon
+  etage: 2
+  surface_m2: 27.78
+propriete: freehold étranger
+agence: FazWaz Pattaya
+prix_thb: 1150000
+prix_m2_thb: 41397
+valeur_cadastrale_thb: 1494564
+vendeur:
+  type: personne physique
+  detenu_depuis_ans: 7
+frais_officiels_thb:
+  frais_transfert_2pct: 29892
+  impot_retenue_source: 37365
+  taxe_specifique: 0
+  droit_timbre_0_5pct: 7473
+  total: 74730
+change:
+  taux_thb_par_eur: 37.50
+  frais_reception_thb: 200
+etapes:
+  - {mois: 2026-06, etape: acompte de réservation 1 300 EUR par virement depuis la France}
+  - {mois: 2026-07, etape: procuration Or Cho 21 signée devant notaire en France}
+  - {mois: 2026-09, etape: procuration envoyée par Chronopost, transfert au bureau foncier de Bang Lamung}
+location:
+  loyer_mensuel_thb: [11000, 13000]
+  charges_mensuelles_usd: 30
+  rendement_net_estime_pct: [8.3, 10.0]
