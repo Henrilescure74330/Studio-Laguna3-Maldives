@@ -10,6 +10,7 @@ Usage :
 import argparse
 import base64
 import gzip
+import json
 import os
 import re
 import secrets
@@ -21,6 +22,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 ITERATIONS = 600_000
 GABARIT = Path(__file__).with_name("gabarit_mot_de_passe.html")
+ACCUEIL = ["vue-aerienne", "piscine-lagon", "lagon-rochers"]
 
 
 def b64(data: bytes) -> str:
@@ -51,6 +53,10 @@ def main() -> None:
                    help="reprend le sel d'une page déjà chiffrée, pour lire ses photos avec la même clé")
     p.add_argument("--sans-photos", action="store_true",
                    help="n'écrit pas les photos chiffrées (elles sont lues depuis --base-photos)")
+    p.add_argument("--gabarit", type=Path, default=GABARIT,
+                   help="page de saisie du mot de passe à utiliser")
+    p.add_argument("--base-accueil", default="accueil/",
+                   help="adresse des photos en clair de la page d'entrée, ou « integrees » pour les mettre dans la page")
     args = p.parse_args()
 
     mot_de_passe = os.environ["MOT_DE_PASSE"]
@@ -74,11 +80,21 @@ def main() -> None:
 
     html = re.sub(r'src="img/([\w-]+)\.jpg"', photo, html)
     contenu = gzip.compress(html.encode(), mtime=0) if args.compresser else html.encode()
-    page = (GABARIT.read_text(encoding="utf-8")
+    accueil = []
+    for nom in ACCUEIL:
+        if args.base_accueil == "integrees":
+            accueil.append("data:image/jpeg;base64," + b64((args.source / "img" / f"{nom}.jpg").read_bytes()))
+        else:
+            if args.base_accueil == "accueil/":
+                (args.sortie / "accueil").mkdir(exist_ok=True)
+                (args.sortie / "accueil" / f"{nom}.jpg").write_bytes((args.source / "img" / f"{nom}.jpg").read_bytes())
+            accueil.append(f"{args.base_accueil}{nom}.jpg")
+    page = (args.gabarit.read_text(encoding="utf-8")
             .replace("__SEL__", b64(sel))
             .replace("__ITERATIONS__", str(ITERATIONS))
             .replace("__BASE_PHOTOS__", args.base_photos)
             .replace("__COMPRESSE__", "true" if args.compresser else "false")
+            .replace("__ACCUEIL__", json.dumps(accueil))
             .replace("__CONTENU__", b64(chiffrer(aes, contenu))))
     (args.sortie / "index.html").write_text(page, encoding="utf-8")
 
