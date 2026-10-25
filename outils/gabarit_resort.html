@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Laguna Beach Resort 3 The Maldives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+/* Page d'entrée : photos du resort en fondu, carte de connexion translucide ; un seul rendu sombre, voulu */
+:root { --deep: #061113; --on-deep: #eef3f1; --muted: #b9c8c7; --gold: #d6b67e; --warn: #f0b27a; color-scheme: dark; }
+body { margin: 0; background: var(--deep); color: var(--on-deep); font-family: "Jost", "Avenir Next", "Segoe UI", system-ui, sans-serif; font-weight: 300; }
+#verrou { position: relative; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; overflow: hidden; padding: 32px max(16px, env(safe-area-inset-right, 0px)) 32px max(16px, env(safe-area-inset-left, 0px)); box-sizing: border-box; }
+#fonds img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 2.2s ease; transform: scale(1.06); }
+#fonds img.vu { opacity: 1; animation: zoom 9s ease-out both; }
+@keyframes zoom { from { transform: scale(1.12); } to { transform: scale(1.02); } }
+#verrou::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(6,17,19,.25) 0%, rgba(6,17,19,.7) 100%), linear-gradient(180deg, rgba(6,17,19,.35), rgba(6,17,19,.6)); }
+#verrou form { position: relative; z-index: 1; width: 100%; max-width: 420px; display: grid; gap: 16px; text-align: center; padding: 40px 32px 30px; box-sizing: border-box; background: rgba(6,17,19,.48); border: 1px solid rgba(214,182,126,.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.lieu { font-size: .7rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+#verrou h1 { margin: 0; font-family: "Cormorant Garamond", Garamond, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.1rem, 7vw, 2.8rem); line-height: 1; }
+#verrou h1 em { display: block; color: var(--gold); margin-top: 6px; }
+.filet { width: 48px; height: 1px; background: var(--gold); margin: 2px auto; border: 0; }
+#verrou p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.5; }
+#verrou input { font: inherit; font-size: 1rem; text-align: center; padding: 13px 14px; border: 1px solid rgba(214,182,126,.45); background: rgba(6,17,19,.5); color: var(--on-deep); }
+#verrou input::placeholder { color: #93a6a5; }
+#verrou button { font: 500 .78rem "Jost", system-ui, sans-serif; letter-spacing: .24em; text-transform: uppercase; padding: 15px 14px; border: 0; background: var(--gold); color: #10232a; cursor: pointer; }
+#verrou button:disabled { opacity: .6; cursor: wait; }
+#verrou input:focus-visible, #verrou button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+#erreur { color: var(--warn) !important; min-height: 1.2em; margin-top: -6px !important; }
+@media (prefers-reduced-motion: reduce) { #fonds img, #fonds img.vu { animation: none; transition: none; transform: none; } }
+</style>
+</head>
+<body>
+<div id="verrou">
+  <div id="fonds" aria-hidden="true"></div>
+  <form id="form-verrou">
+    <span class="lieu">Jomtien Beach · Thaïlande</span>
+    <h1>Laguna Beach Resort 3 <em>The Maldives</em></h1>
+    <hr class="filet">
+    <p>Bienvenue. Entrez le mot de passe pour découvrir le studio face au lagon.</p>
+    <label for="mdp" hidden>Mot de passe</label>
+    <input id="mdp" type="password" autocomplete="current-password" placeholder="Mot de passe" required>
+    <button id="ouvrir" type="submit">Entrer</button>
+    <p id="erreur" role="alert"></p>
+  </form>
+</div>
+<div id="app"></div>
+<script>
+const SEL = "__SEL__", ITERATIONS = __ITERATIONS__, BASE_PHOTOS = "__BASE_PHOTOS__";
+const COMPRESSE = __COMPRESSE__, CONTENU = "__CONTENU__", ACCUEIL = __ACCUEIL__;
+const octets = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+// Diaporama de la page d'entrée
+const fonds = document.getElementById("fonds");
+const vues = ACCUEIL.map(src => { const i = new Image(); i.src = src; i.alt = ""; fonds.appendChild(i); return i; });
+let vue = 0;
+if (vues.length) { vues[0].classList.add("vu"); }
+const diaporama = setInterval(() => {
+  if (vues.length < 2) return;
+  vues[vue].classList.remove("vu"); vue = (vue + 1) % vues.length; vues[vue].classList.add("vu");
+}, 7000);
+
+async function deriver(mdp) {
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(mdp), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt: octets(SEL), iterations: ITERATIONS, hash: "SHA-256" },
+    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+}
+const dechiffrer = (cle, donnees) =>
+  crypto.subtle.decrypt({ name: "AES-GCM", iv: donnees.slice(0, 12) }, cle, donnees.slice(12));
+
+async function afficher(cle, html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  doc.querySelectorAll("head style, head link").forEach(el => document.head.appendChild(el));
+  clearInterval(diaporama);
+  document.getElementById("verrou").remove();
+  const app = document.getElementById("app");
+  const scripts = [...doc.body.querySelectorAll("script")];
+  scripts.forEach(s => s.remove());
+  app.replaceWith(...doc.body.childNodes);
+  for (const s of scripts) { const n = document.createElement("script"); n.textContent = s.textContent; document.body.appendChild(n); }
+  for (const img of document.querySelectorAll("img[data-photo]")) {
+    try {
+      const r = await fetch(BASE_PHOTOS + img.dataset.photo + ".bin");
+      const clair = await dechiffrer(cle, new Uint8Array(await r.arrayBuffer()));
+      img.src = URL.createObjectURL(new Blob([clair], { type: "image/jpeg" }));
+    } catch (e) { img.alt = "Photo indisponible"; }
+  }
+}
+
+async function ouvrir(mdp, silencieux) {
+  const bouton = document.getElementById("ouvrir"), erreur = document.getElementById("erreur");
+  bouton.disabled = true; erreur.textContent = "";
+  try {
+    const cle = await deriver(mdp);
+    let clair = await dechiffrer(cle, octets(CONTENU));
+    if (COMPRESSE) clair = await new Response(new Blob([clair]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+    const html = new TextDecoder().decode(clair);
+    try { sessionStorage.setItem("laguna3-resort-mdp", mdp); } catch (e) {}
+    await afficher(cle, html);
+  } catch (e) {
+    try { sessionStorage.removeItem("laguna3-resort-mdp"); } catch (e2) {}
+    if (!silencieux) erreur.textContent = "Mot de passe incorrect. Vérifiez et réessayez.";
+    bouton.disabled = false;
+  }
+}
+
+document.getElementById("form-verrou").addEventListener("submit", e => {
+  e.preventDefault();
+  ouvrir(document.getElementById("mdp").value, false);
+});
+try { const m = sessionStorage.getItem("laguna3-resort-mdp"); if (m) ouvrir(m, true); } catch (e) {}
+</script>
+</body>
+</html>
