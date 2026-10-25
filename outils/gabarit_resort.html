@@ -15,10 +15,10 @@ body { margin: 0; background: var(--deep); color: var(--on-deep); font-family: "
 #fonds img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 2.2s ease; transform: scale(1.06); }
 #fonds img.vu { opacity: 1; animation: zoom 9s ease-out both; }
 @keyframes zoom { from { transform: scale(1.12); } to { transform: scale(1.02); } }
-#verrou::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(6,17,19,.25) 0%, rgba(6,17,19,.7) 100%), linear-gradient(180deg, rgba(6,17,19,.35), rgba(6,17,19,.6)); }
-#verrou form { position: relative; z-index: 1; width: 100%; max-width: 420px; display: grid; gap: 16px; text-align: center; padding: 40px 32px 30px; box-sizing: border-box; background: rgba(6,17,19,.48); border: 1px solid rgba(214,182,126,.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+#verrou::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(6,17,19,.1) 0%, rgba(6,17,19,.45) 100%), linear-gradient(180deg, rgba(6,17,19,.1), rgba(6,17,19,.35)); }
+#verrou form { position: relative; z-index: 1; width: 100%; max-width: 420px; display: grid; gap: 16px; text-align: center; padding: 40px 32px 30px; box-sizing: border-box; background: rgba(6,17,19,.55); border: 1px solid rgba(214,182,126,.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .lieu { font-size: .7rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
-#verrou h1 { margin: 0; font-family: "Cormorant Garamond", Garamond, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.1rem, 7vw, 2.8rem); line-height: 1; }
+#verrou h1 { margin: 0; font-family: "Cormorant Garamond", Garamond, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.1rem, 7vw, 2.8rem); line-height: 1; text-wrap: balance; }
 #verrou h1 em { display: block; color: var(--gold); margin-top: 6px; }
 .filet { width: 48px; height: 1px; background: var(--gold); margin: 2px auto; border: 0; }
 #verrou p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.5; }
