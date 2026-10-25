@@ -22,7 +22,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 ITERATIONS = 600_000
 GABARIT = Path(__file__).with_name("gabarit_mot_de_passe.html")
-ACCUEIL = ["vue-aerienne", "piscine-lagon", "lagon-rochers"]
+ACCUEIL = ["plage-jomtien", "vue-aerienne", "piscine-lagon", "lagon-rochers"]
 
 
 def b64(data: bytes) -> str:
