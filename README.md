@@ -8,6 +8,8 @@ Achat d'un studio de 27,78 m² au 2ᵉ étage, face à la piscine lagon, au Lagu
 
 **Site touristique « Laguna Beach Resort 3 The Maldives » :** https://henrilescure74330.github.io/Studio-Laguna3-Maldives/the-maldives/ (protégé par mot de passe, dossier `the-maldives/`, page d'entrée avec photos du resort en clair dans `the-maldives/accueil/`)
 
+**Site location « Laguna 3 The Maldives · Location » :** https://henrilescure74330.github.io/Studio-Laguna3-Maldives/location/ (pour les clients et la famille qui louent le studio, sans la partie investissement ; protégé par mot de passe, dossier `location/`)
+
 ## Ce que présente le site
 
 - **Le studio** : photos, vue sur le lagon depuis le balcon, idées de décoration
@@ -33,6 +35,7 @@ La page en clair et les photos ne sont jamais versionnées. Après une modificat
 MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/site docs
 # site touristique
 MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/site-resort the-maldives --gabarit outils/gabarit_resort.html
+MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/site-location location --gabarit outils/gabarit_resort.html
 ```
 
 ## Confidentialité
