@@ -3,6 +3,7 @@
   "tarifs": { "nuit": 1100, "semaine": 5600, "mois": 13000 },
   "tarifs_euros": { "nuit": 30, "semaine": 150, "mois": 350 },
   "reserve": [
+    { "du": "2027-02-08", "au": "2027-02-28" },
     { "du": "2027-03-05", "au": "2027-03-12" }
   ]
 }
