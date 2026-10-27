@@ -10,6 +10,21 @@ Achat d'un studio de 27,78 m² au 2ᵉ étage, face à la piscine lagon, au Lagu
 
 **Site location « Laguna 3 The Maldives · Location » :** https://henrilescure74330.github.io/Studio-Laguna3-Maldives/location/ (pour les clients et la famille qui louent le studio, sans la partie investissement ; protégé par mot de passe, dossier `location/`)
 
+**Site réservation « Laguna 3 The Maldives · Réservation » :** https://henrilescure74330.github.io/Studio-Laguna3-Maldives/reservation/ (le site location avec un calendrier des disponibilités et une demande de réservation envoyée à Nieu par WhatsApp ou e-mail ; protégé par le même mot de passe, dossier `reservation/`)
+
+### Mettre à jour les disponibilités
+
+Les nuits déjà réservées sont dans `reservation/disponibilites.json`, en clair (seulement des dates), sans rien rechiffrer. Le jour `au` est le jour de départ : il redevient libre pour une nouvelle arrivée.
+
+```json
+{
+  "mis_a_jour": "2026-10-27",
+  "reserve": [
+    { "du": "2026-11-10", "au": "2026-12-10" }
+  ]
+}
+```
+
 ## Ce que présente le site
 
 - **Le studio** : photos, vue sur le lagon depuis le balcon, idées de décoration
@@ -36,6 +51,7 @@ MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/site docs
 # site touristique
 MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/site-resort the-maldives --gabarit outils/gabarit_resort.html
 MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/site-location location --gabarit outils/gabarit_resort.html
+MOT_DE_PASSE=... python outils/chiffrer.py chemin/vers/site-reservation reservation --gabarit outils/gabarit_resort.html
 ```
 
 ## Confidentialité
