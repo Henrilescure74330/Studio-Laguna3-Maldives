@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="refresh" content="1; url=https://claude.ai/artifact/NBgz6WA19BHNrcgFoZV4te">
 <title>Gestion Laguna 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&family=Jost:wght@300;500&display=swap">
@@ -17,15 +16,55 @@ main { max-width: 420px; display: grid; gap: 16px; text-align: center; }
 h1 { margin: 0; font-family: "Cormorant Garamond", Garamond, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.1rem, 7vw, 2.8rem); line-height: 1; }
 p { margin: 0; color: var(--muted); line-height: 1.5; }
 a.btn { display: block; font-weight: 500; font-size: .78rem; letter-spacing: .24em; text-transform: uppercase; padding: 15px 14px; background: var(--gold); color: #10232a; text-decoration: none; }
-a.btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+a.btn:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+button { font: 500 .78rem "Jost", system-ui, sans-serif; letter-spacing: .24em; text-transform: uppercase; padding: 15px 14px; border: 1px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; }
+.adresse { font-size: .85rem; word-break: break-all; color: var(--on-deep); background: rgba(214,182,126,.12); padding: 10px; user-select: all; }
+ol { margin: 0; padding-left: 1.2em; text-align: left; color: var(--muted); line-height: 1.55; display: grid; gap: 6px; }
+#mobile[hidden], #bureau[hidden] { display: none; }
 </style>
 </head>
 <body>
 <main>
   <span class="lieu">Laguna 3 · Espace privé</span>
   <h1>Gestion des réservations</h1>
-  <p>Ouverture de l'application… Connectez-vous à claude.ai avec votre compte si on vous le demande.</p>
+  <div id="bureau">
+    <p>Ouverture de l'application… Connectez-vous à claude.ai avec votre compte si on vous le demande.</p>
+  </div>
+  <div id="mobile" hidden>
+    <p>Sur téléphone, le lien direct ouvre l'appli Claude, qui ne sait pas afficher la gestion. Ouvrez-la dans le navigateur :</p>
+    <ol>
+      <li>Touchez « Copier l'adresse ».</li>
+      <li>Ouvrez un nouvel onglet dans Safari ou Chrome, collez l'adresse dans la barre du haut et validez.</li>
+      <li>Si claude.ai vous le demande, connectez-vous avec votre adresse e-mail et le code reçu par e-mail (tapez le code, ne touchez pas le lien du mail).</li>
+      <li>Ensuite, dans Chrome, menu ⋮ puis « Ajouter à l'écran d'accueil » (sur iPhone : « Partager » puis « Sur l'écran d'accueil »).</li>
+      <li>Sur Android, si l'appli Claude s'ouvre quand même : Paramètres › Applications › Claude › « Ouvrir par défaut », désactivez « Ouvrir les liens compatibles », puis recommencez.</li>
+    </ol>
+    <div class="adresse" id="adresse">https://claude.ai/artifact/NBgz6WA19BHNrcgFoZV4te</div>
+    <button type="button" id="copier">Copier l'adresse</button>
+  </div>
   <a class="btn" href="https://claude.ai/artifact/NBgz6WA19BHNrcgFoZV4te">Ouvrir la gestion</a>
 </main>
+<script>
+var URL_GESTION = "https://claude.ai/artifact/NBgz6WA19BHNrcgFoZV4te";
+var mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+if (mobile) {
+  document.getElementById("mobile").hidden = false;
+  document.getElementById("bureau").hidden = true;
+} else {
+  setTimeout(function () { location.href = URL_GESTION; }, 800);
+}
+document.getElementById("copier").addEventListener("click", function () {
+  var b = this;
+  function ok() { b.textContent = "Adresse copiée"; }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(URL_GESTION).then(ok, function () { selectionner(); });
+  } else { selectionner(); }
+  function selectionner() {
+    var r = document.createRange(); r.selectNodeContents(document.getElementById("adresse"));
+    var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    try { document.execCommand("copy"); ok(); } catch (e) {}
+  }
+});
+</script>
 </body>
 </html>
