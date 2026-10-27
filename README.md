@@ -34,7 +34,7 @@ Les tarifs (en bahts, et en euros pour l'affichage « soit environ ») sont dans
 ## Ce que présente le site
 
 - **Le studio** : photos, vue sur le lagon depuis le balcon, idées de décoration
-- **Le resort** : piscines lagon, Seven Eleven, petit centre commercial, spa, sauna, salle de sport, sécurité 24 h/24, parking voiture et scooter
+- **Le resort** : piscines lagon, Seven Eleven, petit centre commercial, spa, sauna, jacuzzi, massages, salle de sport, sécurité 24 h/24, parking voiture et scooter
 - **Le quartier** : plage de Jomtien, couchers de soleil sur la mer, night market, temples, port pour l'île de Koh Lan
 - **L'achat étape par étape** : de l'acompte au transfert au bureau foncier, entièrement à distance
 - **Le coût réel** : frais officiels calculés sur la valeur cadastrale
