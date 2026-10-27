@@ -10,15 +10,19 @@ Achat d'un studio de 27,78 m² au 2ᵉ étage, face à la piscine lagon, au Lagu
 
 **Site location « Laguna 3 The Maldives · Location » :** https://henrilescure74330.github.io/Studio-Laguna3-Maldives/location/ (pour les clients et la famille qui louent le studio, sans la partie investissement ; protégé par mot de passe, dossier `location/`)
 
-**Site réservation « Laguna 3 The Maldives · Réservation » :** https://henrilescure74330.github.io/Studio-Laguna3-Maldives/reservation/ (le site location avec un calendrier des disponibilités et une demande de réservation envoyée à Nieu par WhatsApp ou e-mail ; protégé par le même mot de passe, dossier `reservation/`)
+**Site réservation « Laguna 3 The Maldives · Réservation » :** https://henrilescure74330.github.io/Studio-Laguna3-Maldives/reservation/ (le site location avec un calendrier des disponibilités, des séjours à la nuit, à la semaine, au mois ou à l'année, et une demande de réservation envoyée à Nieu par WhatsApp ou e-mail ; protégé par le même mot de passe, dossier `reservation/`)
 
 ### Mettre à jour les disponibilités
 
 Les nuits déjà réservées sont dans `reservation/disponibilites.json`, en clair (seulement des dates), sans rien rechiffrer. Le jour `au` est le jour de départ : il redevient libre pour une nouvelle arrivée.
 
+Les tarifs (en bahts, et en euros pour l'affichage « soit environ ») sont dans le même fichier. Le prix d'un séjour se calcule en années, mois, semaines et nuits, en passant au tarif supérieur dès qu'il revient moins cher.
+
 ```json
 {
   "mis_a_jour": "2026-10-27",
+  "tarifs": { "nuit": 1100, "semaine": 5600, "mois": 13000, "annee": 150000 },
+  "tarifs_euros": { "nuit": 30, "semaine": 150, "mois": 350, "annee": 4000 },
   "reserve": [
     { "du": "2026-11-10", "au": "2026-12-10" }
   ]
