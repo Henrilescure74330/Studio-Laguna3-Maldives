@@ -18,13 +18,13 @@ Achat d'un studio de 27,78 m² au 2ᵉ étage, face à la piscine lagon, au Lagu
 
 Les nuits déjà réservées sont dans `reservation/disponibilites.json`, en clair (seulement des dates), sans rien rechiffrer. Le jour `au` est le jour de départ : il redevient libre pour une nouvelle arrivée.
 
-Les tarifs (en bahts, et en euros pour l'affichage « soit environ ») sont dans le même fichier. Le prix d'un séjour se calcule en mois, semaines et nuits, en passant au tarif supérieur dès qu'il revient moins cher.
+Les tarifs (en bahts, et en euros pour l'affichage « soit environ ») sont dans le même fichier. Le prix d'un séjour se calcule en mois, semaines et nuits, en passant au tarif supérieur dès qu'il revient moins cher. Le forfait ménage (`menage`) s'ajoute une fois par séjour.
 
 ```json
 {
   "mis_a_jour": "2026-10-27",
-  "tarifs": { "nuit": 1300, "semaine": 7000, "mois": 15000 },
-  "tarifs_euros": { "nuit": 35, "semaine": 185, "mois": 400 },
+  "tarifs": { "nuit": 1300, "semaine": 7000, "mois": 15000, "menage": 400 },
+  "tarifs_euros": { "nuit": 35, "semaine": 185, "mois": 400, "menage": 11 },
   "reserve": [
     { "du": "2026-11-10", "au": "2026-12-10" }
   ]
