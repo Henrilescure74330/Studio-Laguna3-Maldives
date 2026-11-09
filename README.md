@@ -46,7 +46,6 @@ Les tarifs (en bahts, et en euros pour l'affichage « soit environ ») sont dans
 | --- | --- |
 | `docs/` | Site publié avec GitHub Pages, **chiffré** (la page et les photos) |
 | `outils/` | Script qui chiffre le site (AES-256-GCM, clé dérivée du mot de passe par PBKDF2-SHA256, 600 000 itérations) |
-| `data/` | Données du studio, anonymisées |
 
 ## Mettre à jour le site
 
