@@ -23,8 +23,8 @@ Les tarifs (en bahts, et en euros pour l'affichage « soit environ ») sont dans
 ```json
 {
   "mis_a_jour": "2026-10-27",
-  "tarifs": { "nuit": 1300, "semaine": 7000, "mois": 15000, "menage": 400 },
-  "tarifs_euros": { "nuit": 35, "semaine": 185, "mois": 400, "menage": 11 },
+  "tarifs": { "nuit": 1300, "semaine": 7000, "mois": 13000, "menage": 700, "charges_mois": 1900 },
+  "tarifs_euros": { "nuit": 35, "semaine": 185, "mois": 350, "menage": 19, "charges_mois": 50 },
   "reserve": [
     { "du": "2026-11-10", "au": "2026-12-10" }
   ]
